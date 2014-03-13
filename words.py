@@ -16,20 +16,20 @@ class WordSource(object):
     def __init__(self):
         pass
 
-    def get_transitive_verbs(self):
-        return self._get('verb', transitive=True)
+    def get_transitive_verbs(self, limit=None):
+        return self._get('verb', transitive=True, limit=limit)
 
-    def get_intransitive_verbs(self):
+    def get_intransitive_verbs(self, limit=None):
         return self._get('verb', transitive=False)
 
-    def get_adjectives(self):
-        return self._get('adjective')
+    def get_adjectives(self, limit=None):
+        return self._get('adjective', limit=limit)
 
-    def get_nouns(self):
-        return self._get('noun')
+    def get_nouns(self, limit=None):
+        return self._get('noun', limit=limit)
 
-    def get_adverbs(self):
-        return self._get('adverb')
+    def get_adverbs(self, limit=None):
+        return self._get('adverb', limit=limit)
 
     def _get(self, pos, **kwargs):
         """
@@ -41,11 +41,15 @@ class WordSource(object):
             # kludge - default for non-verbs is 0
             transitive = 0
 
-        query = "SELECT word from words where partofspeech=? and transitive=?"
+        limit = kwargs.get('limit')
+        if limit is None:
+            limit = 100
+
+        query = "SELECT word from words where partofspeech=? and transitive=? limit ?"
 
         conn = sqlite3.connect(self.DATAFILE)
         # TODO error checking?
-        result = [row[0] for row in conn.execute(query, (pos, transitive))]
+        result = [row[0] for row in conn.execute(query, (pos, transitive, limit))]
         # Some words are stored annotated... :/
         result = [word.split(' ')[0] for word in result]
         return result

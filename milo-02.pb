@@ -616,7 +616,6 @@ noun-count:
 ;
 
 noun-uncount:
-    "textuality " | "privation " | "masochism " |
     {{ pb_word_list(nouns) }}
 ;
 
@@ -633,7 +632,6 @@ academic-subject:
 ;
 
 verb-intrans-inf:
-    "hobble " | "decompose " | "undulate " |
     {{ pb_word_list(verb_intrans) }}
 ;
 
@@ -642,7 +640,6 @@ verb-intrans-3rd:
 ;
 
 verb-trans-inf:
-    "contravene " | "embolden " | "choreograph " | "substantiate " | "portend " | "encompass " |
     {{ pb_word_list(verb_trans) }}
 ;
 
@@ -672,13 +669,10 @@ scientific-verb-trans-3rd:
 ;
 
 adj:
-    "circumspect " | "unsubstantiated " | "ensconced " | "countercultural " |
-    "tantalizing " | "indispensible " | "contemporary " | "fundamental " | "sapient " |
     {{ pb_word_list(adjectives) }}
 ;
 
 adverb:
-    "undoubtedly " | "remarkably " | "unforseeably " | "unanimously " |
     {{ pb_word_list(adverbs) }}
 ;
 

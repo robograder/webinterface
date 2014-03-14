@@ -17,7 +17,8 @@ class DadaGrammar(object):
 
     def get_grammar_data(self):
         return {
-            "nouns" : self.word_source.get_nouns(),
+            "noun_countable" : self.word_source.get_countable_nouns(),
+            "noun_uncountable" : self.word_source.get_uncountable_nouns(),
             "adverbs" : self.word_source.get_adverbs(),
             "adjectives" : self.word_source.get_adjectives(),
             "verb_intrans" : self.word_source.get_intransitive_verbs(),

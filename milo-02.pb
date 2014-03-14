@@ -611,12 +611,11 @@ famous-name:
 ////////////////////////////////////
 
 noun-count:
-    "juggernaut " | "functionalist " | "circumspection " | "ligature " | "countenance " |
-    "organism " | "rejoinder "
+    {{ pb_word_list(noun_countable) }}
 ;
 
 noun-uncount:
-    {{ pb_word_list(nouns) }}
+    {{ pb_word_list(noun_uncountable) }}
 ;
 
 scientific-noun-count:

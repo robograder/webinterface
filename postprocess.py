@@ -1,6 +1,6 @@
 import re
 import nltk
-from nltk.corpus import cmudict # to install: from python shell run "nltk.download('cmudict')"
+from nltk.corpus import cmudict
 
 CMUDICT = cmudict.dict()
 

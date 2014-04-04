@@ -1,8 +1,6 @@
 import re
 import nltk
-from nltk.corpus import cmudict
-
-CMUDICT = cmudict.dict()
+import pattern.en
 
 # check that there are any letters, making this string a "word"
 def is_word(word):
@@ -10,6 +8,9 @@ def is_word(word):
 
 def strip_punctuation(word):
     return word.strip('.?!,:;()')
+
+def strip_suffix(word):
+    return word.split('#')[0]
 
 class TokenizedText:
     def __init__(self, text):
@@ -37,7 +38,7 @@ class TokenizedText:
             if self.index < 0:
                 return None
             cur_word = self.words[self.index]
-            if is_word(cur_word):
+            if is_word(strip_suffix(cur_word)):
                 return strip_punctuation(cur_word)
         
     def next_word(self):
@@ -46,7 +47,7 @@ class TokenizedText:
             if self.index >= len(self.words):
                 return None
             cur_word = self.words[self.index]
-            if is_word(cur_word):
+            if is_word(strip_suffix(cur_word)):
                 return strip_punctuation(cur_word)
 
     def cur_word(self):
@@ -69,13 +70,7 @@ class TokenizedText:
             self.words[index] = new_word_full
 
     def replace_current_word(self, new_word):
-        replace_word(self.index, new_word)
-
-# determine whether a word begins with a vowel sound
-def begins_with_vowel_sound(word, pronunciations=CMUDICT):
-    # use only the first pronunciation
-    # cmudict.dict().get(word) returns a list of pronunciations, which are lists of sounds represented as strings; the string ends in a digit iff the sound is a vowel
-    return pronunciations.get(word)[0][0][-1].isdigit() if word in pronunciations else word[0] in ('a', 'e', 'i', 'o', 'u')
+        self.replace_word(self.index, new_word)
 
 # Choose the correct indefinite article (a/an) depending on whether the next word begins with a vowel
 def fix_indefinite_articles(essay):
@@ -89,20 +84,43 @@ def fix_indefinite_articles(essay):
 
         if cur_word == None:
             break
-        if last_word.lower() == 'a':
-            if begins_with_vowel_sound(cur_word.lower()):
-                # somewhat hacky--preserve capitalization
-                words.replace_word(last_index, last_word + 'n')
-        elif last_word.lower() == 'an':
-            if not begins_with_vowel_sound(cur_word.lower()):
-                # somewhat hacky--preserve capitalization
-                words.replace_word(last_index, last_word[:1])
+        if last_word.lower() in ('a', 'an'):
+            # somewhat hacky--preserve capitalization
+            words.replace_word(last_index, pattern.en.referenced(cur_word).split()[0])
 
         last_word = cur_word
         last_index = words.current_index()
 
     return words.get_new_text()
 
+def replace_suffixes(essay):
+    ''' Suffixes are originally replaced by
+        
+        #s for plural
+        #vs for singular verbs
+        #d for past tense
+
+        Now, we replace them with the real thing! '''
+
+    words = TokenizedText(essay)
+
+    while True:
+        cur_word = words.next_word()
+        print(cur_word)
+
+        if cur_word == None:
+            break
+        idx = cur_word.find('#')
+        if idx >= 0:
+            if cur_word[idx:] == '#s':
+                words.replace_current_word(pattern.en.pluralize(cur_word[:idx]))
+            elif cur_word[idx:] == '#vs':
+                words.replace_current_word(pattern.en.conjugate(cur_word[:idx], '3sg'))
+            elif cur_word[idx:] == '#d':
+                words.replace_current_word(pattern.en.conjugate(cur_word[:idx], 'p'))
+
+    return words.get_new_text()
+
 # will include all steps in the future
 def postprocess_all(essay):
-    return fix_indefinite_articles(essay)
+    return fix_indefinite_articles(replace_suffixes(essay))

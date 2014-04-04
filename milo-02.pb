@@ -635,7 +635,7 @@ verb-intrans-inf:
 ;
 
 verb-intrans-3rd:
-    verb-intrans-inf>plural
+    verb-intrans-inf>verb-third
 ;
 
 verb-trans-inf:
@@ -644,7 +644,7 @@ verb-trans-inf:
 
 verb-trans-3rd:
     // is this allowed??
-    verb-trans-inf>plural
+    verb-trans-inf>verb-third
 ;
 
 verb-aux:
@@ -656,7 +656,7 @@ scientific-verb-intrans-inf:
 ;
 
 scientific-verb-intrans-3rd:
-    scientific-verb-intrans-inf>plural
+    scientific-verb-intrans-inf>verb-third
 ;
 
 scientific-verb-trans-inf:
@@ -664,7 +664,7 @@ scientific-verb-trans-inf:
 ;
 
 scientific-verb-trans-3rd:
-    scientific-verb-trans-inf>plural
+    scientific-verb-trans-inf>verb-third
 ;
 
 adj:
@@ -708,9 +708,11 @@ trim:
 ;
 
 plural:
-    ".*y $" -> "y $"/"ies "
-    ".*s $" -> " $"/"es "
-    ".* $" -> " $"/"s "
+    ".* $" -> " $"/"#s "
+;
+
+verb-third:
+    ".* $" -> " $"/"#vs "
 ;
 
 gerund:
@@ -719,7 +721,5 @@ gerund:
 ;
 
 pastpart:
-    ".*y $" -> "y $"/"ied "
-    ".*e $" -> " $"/"d "
-    ".* $" -> " $"/"ed "
+    ".* $" -> " $"/"#d "
 ;

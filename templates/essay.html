@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="keyword-form">
+  <h3>Generate an essay:</h3>
+  <form method="GET">
+
+    <div class="form-row">
+      <input type="text" name="keyword" placeholder="keyword 1"/>
+    </div>
+
+    <div class="form-row">
+      <input type="text" name="keyword" placeholder="keyword 2"/>
+    </div>
+
+    <div class="form-row">
+      <input type="text" name="keyword" placeholder="keyword 3"/>
+    </div>
+
+    <button type="submit" name="generate">Generate!</button>
+  </form>
+
+</div>
+
+{% if keywords %}
+<div class="keyword-list">
+  <h3>Keywords:</h3>
+  <ul>
+    {% for keyword in keywords %}
+    <li>{{ keyword }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+{% if essay %}
+<div class="essay">
+  <h3>Essay:</h3>
+  <div class="essay-contents">{{ essay|safe }}</div>
+</div>
+{% endif %}
+
+{% endblock %}

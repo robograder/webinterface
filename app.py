@@ -20,9 +20,11 @@ def go():
         else:
             error = None
         essay = ""
+        relateds = {}
     else:
         error = None
         topical_nouns = []
+        relateds = {}
         for keyword in keywords:
             related = ontopic.get_related(keyword)
             if related is None:
@@ -31,14 +33,20 @@ def go():
                 break
             for w in related:
                 topical_nouns.append(w)
+            relateds[keyword] = list(set(related))
 
         if error:
             essay = ""
         else:
+            # make sure theres no more than 100
+            if len(topical_nouns) > 100:
+                random.shuffle(topical_nouns)
+                topical_nouns = topical_nouns[:100]
+
             dada = DadaGrammar("milo-02.pb", topical_nouns)
             essay = pp.postprocess_all(dada.render())
 
-    return flask.render_template('essay.html', essay=essay, keywords=keywords, error=error)
+    return flask.render_template('essay.html', essay=essay, keywords=keywords, relateds=relateds, error=error)
 
 
 if __name__ == "__main__":

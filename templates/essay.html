@@ -28,9 +28,17 @@
   <h3>Keywords:</h3>
   <ul>
     {% for keyword in keywords %}
-    <li>{{ keyword }}</li>
+    <li><b>{{ keyword }}</b>: {{ relateds[keyword] }}</li>
     {% endfor %}
   </ul>
+
+  <form method="GET">
+    {% for keyword in keywords %}
+    <input type="hidden" name="keyword" value="{{keyword}}">
+    {% endfor %}
+    <button type="submit" name="generate">Generate another with same keywords</button>
+  </form>
+
 </div>
 {% endif %}
 

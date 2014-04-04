@@ -1,5 +1,5 @@
 """
-exposed function get_synonyms, to return set of n synonyms / related word (up to n)
+exposed function get_related, to return set of n synonyms / related word (up to n)
 """
 import sys
 
@@ -7,7 +7,7 @@ from nltk.corpus import wordnet
 
 
 
-def get_synonyms(word):
+def get_related(word):
 
     synsets = wordnet.synsets(word)
     if not synsets:
@@ -27,9 +27,22 @@ def get_synonyms(word):
         out.append(s)
         out.append(s)
 
-    # hyponyms, meronyms, homonyms
-    for related in (synset.hyponyms(), synset.part_meronyms(), synset.part_holonyms()):
-        for syn in related:
+    relates = [
+    'hypernyms', 'instance_hypernyms',
+    'hyponyms', 'instance_hyponyms',
+    'member_holonyms', 'substance_holonyms', 'part_holonyms',
+    'member_meronyms', 'substance_meronyms', 'part_meronyms',
+    'attributes',
+    'entailments',
+    'causes',
+    'also_sees',
+    'verb_groups',
+    'similar_tos',
+    ]
+
+
+    for related in relates:
+        for syn in getattr(synset, related)():
             for l in syn.lemmas:
                 out.append(l.name.replace('_', ' '))
 

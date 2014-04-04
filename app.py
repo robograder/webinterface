@@ -4,13 +4,12 @@ import flask
 
 from dada import DadaGrammar
 import postprocess as pp
+import ontopic
 
 DEBUG = True
 
 app = flask.Flask(__name__)
 app.debug = DEBUG
-
-dada = DadaGrammar()
 
 @app.route("/")
 def go():
@@ -23,7 +22,21 @@ def go():
         essay = ""
     else:
         error = None
-        essay = pp.postprocess_all(dada.render())
+        topical_nouns = []
+        for keyword in keywords:
+            related = ontopic.get_related(keyword)
+            if related is None:
+                # thats an error
+                error = "unable to find related words for %s. Typo?" % keyword
+                break
+            for w in related:
+                topical_nouns.append(w)
+
+        if error:
+            essay = ""
+        else:
+            dada = DadaGrammar("milo-02.pb", topical_nouns)
+            essay = pp.postprocess_all(dada.render())
 
     return flask.render_template('essay.html', essay=essay, keywords=keywords, error=error)
 
@@ -33,5 +46,4 @@ if __name__ == "__main__":
         port = int(sys.argv[1])
     else:
         port = 8888
-    dada.grammar_template = "milo-02.pb"
     app.run('0.0.0.0', port=port)

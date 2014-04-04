@@ -592,7 +592,7 @@ those:
 
 topic:
 // temporary, clearly
-    "technology " | "progress "
+    {{ pb_word_list(topical_nouns) }}
 ;
 
 usually:

@@ -11,8 +11,9 @@ class DadaGrammar(object):
 
     DADA_COMMAND = "dada"
 
-    def __init__(self):
-        self.grammar_template = None
+    def __init__(self, source, topical_nouns):
+        self.grammar_template = source
+        self.topical_nouns = topical_nouns
         self.word_source = words.WordSource()
 
     def get_grammar_data(self):
@@ -23,6 +24,7 @@ class DadaGrammar(object):
             "adjectives" : self.word_source.get_adjectives(),
             "verb_intrans" : self.word_source.get_intransitive_verbs(),
             "verb_trans" : self.word_source.get_transitive_verbs(),
+            "topical_nouns" : self.topical_nouns,
         }
 
     def render(self):

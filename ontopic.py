@@ -18,7 +18,7 @@ def get_related(word):
     out = []
     out.append(word) # put it in!
 
-    synonyms = [l.name for l in synset.lemmas]
+    synonyms = [l.name.replace('_', ' ') for l in synset.lemmas]
 
     # add all the synonyms, twice
     # so that they are more likely to appear

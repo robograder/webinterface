@@ -53,7 +53,7 @@ class WordSource(object):
         if limit is None:
             limit = 100
 
-        query = "SELECT word from words where partofspeech=? and transitive=? and countable=? limit ?"
+        query = "SELECT word from words where partofspeech=? and transitive=? and countable=?  ORDER BY random() limit ?"
 
         conn = sqlite3.connect(self.DATAFILE)
         # TODO error checking?

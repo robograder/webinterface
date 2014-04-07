@@ -6,6 +6,10 @@ import random
 
 from nltk.corpus import wordnet
 
+# Set to True to attempt to walk wordnet to find
+# related words.
+INCLUDE_RELATED = False
+
 def get_related(word):
 
     synsets = wordnet.synsets(word)
@@ -17,6 +21,7 @@ def get_related(word):
 
     out = []
     out.append(word) # put it in!
+    out.append(word) # twice!
 
     synonyms = [l.name.replace('_', ' ') for l in synset.lemmas]
 
@@ -26,24 +31,26 @@ def get_related(word):
         out.append(s)
         out.append(s)
 
-    relates = [
-    'hypernyms', 'instance_hypernyms',
-    'hyponyms', #'instance_hyponyms',
-    'member_holonyms', 'substance_holonyms', 'part_holonyms',
-    'member_meronyms', 'substance_meronyms', 'part_meronyms',
-    'attributes',
-    'entailments',
-    'causes',
-    'also_sees',
-    'verb_groups',
-    'similar_tos',
-    ]
+
+    if INCLUDE_RELATED:
+        relates = [
+        'hypernyms', 'instance_hypernyms',
+        'hyponyms', #'instance_hyponyms',
+        'member_holonyms', 'substance_holonyms', 'part_holonyms',
+        'member_meronyms', 'substance_meronyms', 'part_meronyms',
+        'attributes',
+        'entailments',
+        'causes',
+        'also_sees',
+        'verb_groups',
+        'similar_tos',
+        ]
 
 
-    for related in relates:
-        for syn in getattr(synset, related)():
-            for l in syn.lemmas:
-                out.append(l.name.replace('_', ' '))
+        for related in relates:
+            for syn in getattr(synset, related)():
+                for l in syn.lemmas:
+                    out.append(l.name.replace('_', ' '))
 
     # no abbreviations
     out = [w for w in out if not w.isupper()]

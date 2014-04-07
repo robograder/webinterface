@@ -57,4 +57,4 @@ def get_related(word):
 if __name__ == "__main__":
     word = sys.argv[1]
     print "%s:" % word
-    print get_synonyms(word)
+    print get_related(word)

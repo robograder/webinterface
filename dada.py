@@ -3,6 +3,7 @@ Wraps Dada, taking care of things
 """
 import json
 import subprocess
+import time
 
 import words
 
@@ -30,11 +31,17 @@ class DadaGrammar(object):
         }
 
     def render(self):
+        # Profiling
+        render_start_time = time.time()
+
         if self.grammar_template is None:
             raise  ValueError("grammar_template must be set")
 
         # Get the Vocab data for rendering
         data = self.get_grammar_data()
+
+        # Profiling
+        data_ready_time = time.time()
 
         # Do a dada, it expects JSON on stdin
         cmd = [self.DADA_COMMAND, '-j', '-', self.grammar_template]
@@ -55,4 +62,10 @@ class DadaGrammar(object):
         if dada_process.returncode != 0:
             raise DadaError("Dada error: %s" % dada_stderr)
 
+        render_done_time = time.time()
+        print "Render latency: %fms (%fms data, %fms dada)" % (
+            (render_done_time - render_start_time) * 1000,
+            (data_ready_time - render_start_time) * 1000,
+            (render_done_time - data_ready_time) * 1000,
+        )
         return dada_stdout

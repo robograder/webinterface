@@ -1,11 +1,13 @@
 """
 Wraps Dada, taking care of things
 """
-import tempfile
 import json
 import subprocess
 
 import words
+
+class DadaError(RuntimeError):
+    pass
 
 class DadaGrammar(object):
 
@@ -34,17 +36,23 @@ class DadaGrammar(object):
         # Get the Vocab data for rendering
         data = self.get_grammar_data()
 
-        # Get temp file
-        temp = tempfile.NamedTemporaryFile()
+        # Do a dada, it expects JSON on stdin
+        cmd = [self.DADA_COMMAND, '-j', '-', self.grammar_template]
 
-        # Dump data to the tempfile
-        json.dump(data, temp)
-        temp.flush()
-
-        # Do a dada!
-        cmd = [self.DADA_COMMAND, '-j', temp.name, self.grammar_template]
-
+        # Spawn it
         try:
-            return subprocess.check_output(cmd)
-        except subprocess.CalledProcessError as e:
-            return "ERROR: " + str(e)
+            dada_process = subprocess.Popen(
+                cmd,
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+        except OSError as e:
+            raise DadaError("Unable to start dada: %s" % e.strerror)
+
+        # Feed in data as json to STDIN and get result
+        dada_stdout, dada_stderr = dada_process.communicate(json.dumps(data))
+        if dada_process.returncode != 0:
+            raise DadaError("Dada error: %s" % dada_stderr)
+
+        return dada_stdout

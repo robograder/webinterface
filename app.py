@@ -4,7 +4,7 @@ import random
 
 import flask
 
-from dada import DadaGrammar
+from dada import DadaGrammar, DadaError
 import postprocess as pp
 import ontopic
 
@@ -58,7 +58,14 @@ def go():
                 topical_nouns = topical_nouns[:100]
 
             dada = DadaGrammar("milo-02.pb", topical_nouns)
-            essay = pp.postprocess_all(dada.render())
+
+            try:
+                essay = dada.render()
+            except DadaError as e:
+                error = e.message
+                essay = ""
+
+            essay = pp.postprocess_all(essay)
 
     return flask.render_template('essay.html', essay=essay, keywords=keywords, relateds=relateds, error=error)
 

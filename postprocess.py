@@ -106,7 +106,6 @@ def replace_suffixes(essay):
 
     while True:
         cur_word = words.next_word()
-        print(cur_word)
 
         if cur_word == None:
             break

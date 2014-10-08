@@ -16,6 +16,9 @@ app = flask.Flask(__name__)
 app.debug = DEBUG
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+
+# Setup nltk search path
+import nltk
 nltk.data.path.append(APP_ROOT)
 
 @app.route("/echo")

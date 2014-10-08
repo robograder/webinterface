@@ -10,8 +10,8 @@ import requests
 LOCAL_URL = 'http://localhost:8888/'
 PROD_URL = 'http://babel-generator.herokuapp.com/'
 
-N_CONCURRENT = 50
-REQUESTS_PER_CONCURRENT = 10
+N_CONCURRENT = 1
+REQUESTS_PER_CONCURRENT = 20
 
 class UserThread(threading.Thread):
 

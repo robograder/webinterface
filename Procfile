@@ -1,1 +1,1 @@
-web: python app.py
+web: gunicorn app:app --workers $WEB_CONCURRENCY --log-file -

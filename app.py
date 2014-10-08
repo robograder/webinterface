@@ -61,7 +61,7 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         port = int(sys.argv[1])
     elif 'PORT' in os.environ:
-        port = os.environ['PORT']
+        port = int(os.environ['PORT'])
     else:
         port = 8888
 

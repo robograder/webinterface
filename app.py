@@ -1,3 +1,4 @@
+import os
 import sys
 import random
 
@@ -7,10 +8,16 @@ from dada import DadaGrammar
 import postprocess as pp
 import ontopic
 
-DEBUG = True
+PRODUCTION = bool(os.environ.get('PRODUCTION'))
+
+DEBUG = not PRODUCTION
 
 app = flask.Flask(__name__)
 app.debug = DEBUG
+
+@app.route("/echo")
+def echo():
+    return "echo"
 
 @app.route("/")
 def go():
@@ -53,6 +60,9 @@ def go():
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         port = int(sys.argv[1])
+    elif 'PORT' in os.environ:
+        port = os.environ['PORT']
     else:
         port = 8888
+
     app.run('0.0.0.0', port=port)

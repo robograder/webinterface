@@ -2,51 +2,67 @@
 
 {% block content %}
 
-<div class="keyword-form">
-  <h3>Generate an essay:</h3>
-  <form method="GET">
+<div class="title">
+  <h1>Babel Generator</h1>
+</div>
 
-    <div class="form-row">
-      <input type="text" name="keyword" placeholder="keyword 1"/>
-    </div>
+<div class="left-column">
 
-    <div class="form-row">
-      <input type="text" name="keyword" placeholder="keyword 2"/>
-    </div>
+  {% if keywords %}
+  <div class="keyword-list">
+    <h3>Keywords:</h3>
+    <ul>
+      {% for keyword in keywords %}
+      <li><b>{{ keyword }}</b>:
+        {% for related in relateds[keyword] %}
+        &#8220;{{ related }}&#8221;
+        {% endfor %}
+      </li>
+      {% endfor %}
+    </ul>
 
-    <div class="form-row">
-      <input type="text" name="keyword" placeholder="keyword 3"/>
-    </div>
+    <form method="GET">
+      {% for keyword in keywords %}
+      <input type="hidden" name="keyword" value="{{keyword}}">
+      {% endfor %}
+      <button type="submit" name="generate">Generate another with same keywords</button>
+    </form>
 
-    <button type="submit" name="generate">Generate!</button>
-  </form>
+  </div>
+  {% endif %}
+
+  <div class="keyword-form">
+    <h3>Generate {{ "new" if keywords else "an" }} essay:</h3>
+    <form method="GET">
+
+      <div class="form-row">
+        <input type="text" name="keyword" placeholder="keyword 1"/>
+      </div>
+
+      <div class="form-row">
+        <input type="text" name="keyword" placeholder="keyword 2"/>
+      </div>
+
+      <div class="form-row">
+        <input type="text" name="keyword" placeholder="keyword 3"/>
+      </div>
+
+      <button type="submit" name="generate">Generate!</button>
+    </form>
+
+  </div>
 
 </div>
 
-{% if keywords %}
-<div class="keyword-list">
-  <h3>Keywords:</h3>
-  <ul>
-    {% for keyword in keywords %}
-    <li><b>{{ keyword }}</b>: {{ relateds[keyword] }}</li>
-    {% endfor %}
-  </ul>
-
-  <form method="GET">
-    {% for keyword in keywords %}
-    <input type="hidden" name="keyword" value="{{keyword}}">
-    {% endfor %}
-    <button type="submit" name="generate">Generate another with same keywords</button>
-  </form>
-
+<div class="right-column">
+  {% if essay %}
+  <div class="essay">
+    <h3>Essay:</h3>
+    <div class="essay-contents">{{ essay|safe }}</div>
+  </div>
+  {% endif %}
 </div>
-{% endif %}
 
-{% if essay %}
-<div class="essay">
-  <h3>Essay:</h3>
-  <div class="essay-contents">{{ essay|safe }}</div>
-</div>
-{% endif %}
+<div class="clearfix"></div>
 
 {% endblock %}

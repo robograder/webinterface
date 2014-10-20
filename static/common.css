@@ -21,17 +21,21 @@ body {
 
 .content-wrapper {
   min-height:100%;
-  margin-bottom:-110px; /* footer.height + footer.padding-top */
-  padding-left:10px;
-  padding-right:10px;
+}
+
+.content {
+  padding:10px;
+  padding-bottom:110px; /* footer.height + footer.padding-top */
 }
 
 .footer {
+  position:relative;
   height:100px;
   padding-top:10px;
   padding-left:10px;
   padding-right:10px;
   clear:both;
+  margin-top:-110px;
 }
 
 .clearfix {

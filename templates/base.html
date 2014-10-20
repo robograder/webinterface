@@ -8,15 +8,18 @@
 
 <body>
 
-  {% if error %}
-  <div class="error">
-    {{ error }}
-  </div>
-  {% endif %}
-
   <div class="content-wrapper">
-  {% block content %}
-  {% endblock %}
+    {% if error %}
+    <div class="error">
+      {{ error }}
+    </div>
+    {% endif %}
+
+    <div class="content">
+      {% block content %}
+      {% endblock %}
+    </div>
+
   </div>
 
   <div class="footer">

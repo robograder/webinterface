@@ -36,6 +36,11 @@ body {
   padding-right:10px;
   clear:both;
   margin-top:-110px;
+  font-size:10px;
+}
+
+.footer p {
+  margin:0px;
 }
 
 .clearfix {
